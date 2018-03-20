@@ -36,7 +36,7 @@ You will be met with some instructions allowing you to continue
 
 ## Documentation
 
-###Changing number of threads
+#### Changing number of threads
 
 Inside of multithreads.py there is a variable:
 
@@ -45,7 +45,7 @@ no_Threads = 4
 ```
 Change this to match your machines number of processors.
 
-###Creating your own systems
+#### Creating your own systems
 
 All planetary constants and physical constants can be found in systempicker.py
 
@@ -60,7 +60,7 @@ planetLookUp = {
         "j1407b": (MassJ14, MassJ14Moon, 96.83e6)
     }
 ```
-###Adjusting Physics of system
+#### Adjusting Physics of system
 To adjust the physics of the system edit Physics.py
 
 
@@ -69,5 +69,5 @@ To adjust the physics of the system edit Physics.py
 
 ## Authors
 
-* **Matt Moore** - *
+* **Matt Moore**
 
