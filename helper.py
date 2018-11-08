@@ -1,18 +1,18 @@
-
 import matplotlib.animation as animation
 import numpy as np
 import math
 import smtplib
 import copy
 import time
-
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
-
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
+
+# this class contains a lot of helper methods. Many of these are not used but have been
+# left here for future use.
 
 def estimateCompletionTime(gap, range, time):
     result = str((time * (range / gap)) / 60)
@@ -176,6 +176,8 @@ def plotWidths(X, Y):
 
     plt.title("Division widths against Mass ratios")
     fig.savefig("massratio.png")
+
+
 def plotOrbits(rocketPos):
     fig = plt.figure()
 
