@@ -64,7 +64,7 @@ planetLookUp = {
 To adjust the physics of the system edit Physics.py
 
 #### Adjusting simulation parameters
-To change the number of orbits that are simulated change the following inside of
+To change the number of orbits that are simulated change the following
 ```
 def runSimulation(startPos, diff):
     """Runs simulation of the particles around their host planet"""
