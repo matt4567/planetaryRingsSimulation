@@ -63,9 +63,27 @@ planetLookUp = {
 #### Adjusting Physics of system
 To adjust the physics of the system edit Physics.py
 
-
-
-
+#### Adjusting simulation parameters
+To change the number of orbits that are simulated change the following inside of
+```
+def runSimulation(startPos, diff):
+    """Runs simulation of the particles around their host planet"""
+    # Number of orbits around host planet to be simulated
+    num = 2
+    # a is the timestep in seconds
+    a = 100
+    
+```
+inside of Main.py.
+Increase the number of orbits by changing
+```
+num = 2
+```
+to be your desired number of orbits and increase the timestep between iterations by changing
+```
+a = 100
+```
+to be your desired timestep in seconds.
 
 ## Authors
 
