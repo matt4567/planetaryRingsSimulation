@@ -25,11 +25,10 @@ print "Choose which system you want, your options are:"
 print "Earth, Jupiter, Saturn, Uranus, Neptune or J1407b."
 
 system = raw_input("system name (note if you make a mistake it will default to Saturn): ")
-massPlanet, massMoon, earthMoonDistance = getMassesAndDistance(system);
+massPlanet, massMoon, earthMoonDistance = getMassesAndDistance(system)
 
 print "Masses"
 print massPlanet, " kg & ", massMoon, " kg"
-
 print "Distance"
 print earthMoonDistance, " km"
 
@@ -53,16 +52,13 @@ def particleSetup():
 
     return [begin, gap, len(distRange), distRange, stop, diff]
 
-
-
-
 def runSimulation(startPos, diff):
     '''Runs simulation of the particles around their host planet'''
     # Number of orbits around host planet to be simulated
     num = 2
     # a is the timestep in seconds
     a = 100
-	#create the planetary system with a particle. Note we are called the particle a rocket
+    #create the planetary system with a particle. Note we are called the particle a rocket
 	#here for historic reasons. (I didin't want to change my class names - i know its lazy).  	
     planet = BigRock(massPlanet, -massMoon, earthMoonDistance)
     moon = BigRock(massMoon, massPlanet, earthMoonDistance)
@@ -108,7 +104,6 @@ def runSimulation(startPos, diff):
         rocketPosY.append(y)
 #       check if rocket is in final quarter of circular orbit. 
         if x > 0 and y < 0:
-
             finalQuarter = True
 
 # 		if particle has completed desired number of orbits (i.e. num is zero) and is in the
@@ -138,7 +133,6 @@ def analyandPlot(finalRocketPos, initialRocketPos, gap, begin, stop, diff):
 # 	and after simulation.
     densities = np.zeros(shape=(len(buckets)))
     densitiesOrig = np.zeros(shape=(len(buckets)))
-
     for index, i in enumerate(finalRocketPos):
         if i != None:
 #         	add particle to bucket and change density array accordingly. 
@@ -152,5 +146,3 @@ def analyandPlot(finalRocketPos, initialRocketPos, gap, begin, stop, diff):
         densitiesOrig[indexOrig] += 1
 
     plotStability(buckets, densities, densitiesOrig)
-
-

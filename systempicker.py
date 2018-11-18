@@ -1,26 +1,19 @@
 # Masses of Systems
+
 MassEarth = 5.9742e24
 MassMoon = 7.35e22
 
 MassJupiter = 1.898e27
 MassGanymede = 1.48e23
 
-
-# MassSaturn = 5.683e26
-# MassMimas = 3.8e19
-
 MassSaturn = 5.683e26
 MassMimas = 3.80e20
-
 
 MassJ14 = 13 * MassJupiter
 MassJ14Moon = 0.8 * MassEarth
 
-
-
 MassNeptune = 1.024e26
 MassTriton = 2.14e1022
-
 
 MassUranus = 8.681e25
 MassTitania = 3.42e21

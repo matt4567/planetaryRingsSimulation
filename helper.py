@@ -15,8 +15,8 @@ from email.mime.multipart import MIMEMultipart
 # left here for future use.
 
 def estimateCompletionTime(gap, range, time):
+    '''Estimate completion time of simulation by looking at completion time of one iteration.'''
     result = str((time * (range / gap)) / 60)
-
     return "Simulation will take " + result + " mins"
 
 
@@ -35,6 +35,7 @@ def sendEmail(number, mins):
     img = MIMEImage(img_data)
     msg.attach(img)
 
+    # email body
     body = "The simulation is complete. The number of simulated particles was " + str(number) \
      + " and the simulation took " + str(mins) + " mins to run."
     msg.attach(MIMEText(body, 'plain'))
@@ -43,23 +44,23 @@ def sendEmail(number, mins):
     server.ehlo()
     server.starttls()
     server.ehlo()
+
     # login credentials
     username = "username"
     password = "password"
+
     server.login(username, password)
-
     text = msg.as_string()
-
     server.sendmail(fromaddr, toaddr, text)
     print "Email sent!"
 
-
 def findBucket(x, resolution):
-
+    '''Find the correct bucket for a particle when grouping the data to plot densities.'''
     return int(math.floor(x / resolution)) * resolution
 
-
 def animateMotion(rocketPosX, rocketPosY, earthPosX, earthPosY, moonPosX, moonPosY):
+    '''Creates and saves an animation of the orbits of the earth, moon and rocket. Used for presentation purposes.'''
+    # Create arrays for rocket, earth and moon positions
     rocketArrayX = np.array(rocketPosX[0::1500])
     rocketArrayY = np.array(rocketPosY[0::1500])
 
@@ -69,6 +70,7 @@ def animateMotion(rocketPosX, rocketPosY, earthPosX, earthPosY, moonPosX, moonPo
     moonArrayX = np.array(moonPosX[0::1500])
     moonArrayY = np.array(moonPosY[0::1500])
 
+    # Create figure
     fig = plt.figure()
     fig.set_dpi(100)
     fig.set_size_inches(7, 7)
@@ -78,13 +80,12 @@ def animateMotion(rocketPosX, rocketPosY, earthPosX, earthPosY, moonPosX, moonPo
     rocket = plt.Circle((0, 0), 20000, fc='y', label = "Rocket")
     earth = plt.Circle((0, 0), 80000, fc='b', label = "Earth")
     moon = plt.Circle((0, 0), 40000, fc='g', label = "Moon")
-
     ax.legend(handles=[rocket, earth, moon])
 
+    # setup for for animation. Add objects to animation.
     def init():
         rocket.center = (5, 5)
         ax.add_patch(rocket)
-        # ax.add_label("rocket")
 
         earth.center = (0, 0)
         ax.add_patch(earth)
@@ -93,18 +94,16 @@ def animateMotion(rocketPosX, rocketPosY, earthPosX, earthPosY, moonPosX, moonPo
         ax.add_patch(moon)
         return rocket, earth, moon
 
+    # Run animation, move positions of rocket, earth and moon according to previously simulated positions.
     def animate(i):
-        x, y = rocket.center
         x = rocketArrayX[i]
         y = rocketArrayY[i]
         rocket.center = (x, y)
 
-        xE, yE = earth.center
         xE = earthArrayX[i]
         yE = earthArrayY[i]
         earth.center = (xE, yE)
 
-        xM, yM = moon.center
         xM = moonArrayX[i]
         yM = moonArrayY[i]
         moon.center = (xM, yM)
@@ -117,78 +116,41 @@ def animateMotion(rocketPosX, rocketPosY, earthPosX, earthPosY, moonPosX, moonPo
                                    interval=47,
                                    blit=True)
 
-    # plt.legend()
-    # plt.show()
     anim.save('im.mp4')
-    # plt.plot(earthPosX, earthPosY, label="Earth")
-    #
-    # print "distance: ", distanceBetween
-    # ims.append(plt.plot(earthPosX, earthPosY, label="Earth"))
-    # ims.append(plt.plot(moonPosX, moonPosY, zorder = 2, label = "Moon"))
-    # ims.append(plt.plot(rocketPosX, rocketPosY, zorder = 1, label = "Rocket"))
-    # # ims.append(plt.legend())
-    # # plt.show()
-    #
-    # im_ani = animation.ArtistAnimation(fig, ims, interval=50, repeat_delay=3000,
-    #                                    blit=True)
 
 def plotStability(X, Y, Y2):
-
-
+    '''Create a plot of the stability of an orbit - plot start and end positions of orbit.'''
     fig = plt.figure()
     ax = fig.add_subplot(111)
-
     X2 = copy.copy(X)
-
-    # print X
-    # print Y
 
     plt.plot(X, Y, label = "end positions")
     plt.plot(X2, Y2, label = "start positions")
-
     plt.xlabel("Radial Distance/ km")
     plt.ylabel("Density of particles")
-
     plt.legend()
     plt.ylim(ymax = 15, ymin = 0)
-
     plt.title("Orbital stability")
     fig.savefig("plot.png")
 
 def plotWidths(X, Y):
-
-
+    '''Plot the widths of the divisions.'''
     fig = plt.figure()
     ax = fig.add_subplot(111)
-
-
-
-    # print X
-    # print Y
-
     plt.plot(X, Y)
-
 
     plt.xlabel("Mass Ratios")
     plt.ylabel("Width of division / km")
-
     plt.legend()
-
     plt.title("Division widths against Mass ratios")
     fig.savefig("massratio.png")
 
 
 def plotOrbits(rocketPos):
+    '''Plot the orbits of the particle.'''
     fig = plt.figure()
-
     print "plotting orbits"
     for i, val in enumerate(rocketPos):
-
-
-    # ax = plt.axes(xlim=(-100000, 100000), ylim=(-100000, 100000))
-    # earth = plt.Circle((earthPosX[0], earthPosY[0]), 1600, fc='b', label="Earth")
-    # ax.add_patch(earth)
-
         plt.plot(val[0], val[1], label = "Moon")
         plt.plot(val[2], val[3], label = "Planet")
         plt.plot(val[4], val[5], zorder=1, label="Rocket" + str(i))
