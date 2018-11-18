@@ -32,14 +32,16 @@ print massPlanet, " kg & ", massMoon, " kg"
 print "Distance"
 print earthMoonDistance, " km"
 
+
 def measureGap(results):
-    '''Measure the size fo the division'''
+    """Measure the size fo the division"""
     gapCentre = min(results)
     width = 10 / gapCentre
     return width
 
+
 def particleSetup():
-    '''Setup particles ready to be simulated'''
+    """Setup particles ready to be simulated"""
     # Setup the start and end positions as well as the gap between each particle.
     mag = int(math.log10(earthMoonDistance))
     diff = 10 ** (mag - 1)
@@ -52,14 +54,15 @@ def particleSetup():
 
     return [begin, gap, len(distRange), distRange, stop, diff]
 
+
 def runSimulation(startPos, diff):
-    '''Runs simulation of the particles around their host planet'''
+    """Runs simulation of the particles around their host planet"""
     # Number of orbits around host planet to be simulated
     num = 2
     # a is the timestep in seconds
     a = 100
     # create the planetary system with a particle. Note we are called the particle a rocket
-	# here for historic reasons. (I didin't want to change my class names - i know its lazy).
+    # here for historic reasons. (I didin't want to change my class names - i know its lazy).
     planet = BigRock(massPlanet, -massMoon, earthMoonDistance)
     moon = BigRock(massMoon, massPlanet, earthMoonDistance)
     rocket = Rocket(startPos, planet.posRock, 0, moon.posRock, 0, massPlanet, massMoon, False, earthMoonDistance)
@@ -123,8 +126,9 @@ def runSimulation(startPos, diff):
                 finalQuarter = False
                 num -= 1
 
+
 def analyandPlot(finalRocketPos, initialRocketPos, gap, begin, stop, diff):
-    '''plot the results of the simuation'''
+    """plot the results of the simuation"""
     # define resolution for grouping of particles to plot number statistics.
     resolution = gap * 10
     # create buckets for grouping

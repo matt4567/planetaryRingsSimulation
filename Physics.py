@@ -19,25 +19,26 @@ import copy
 
 GravitationalConst = 6.6726e-20
 
+
 class SpaceStuff:
-    '''General class for all space faring objects'''
+    """General class for all space faring objects"""
     def __init__(self, massSelf, massOther, earthMoonDistance):
-        '''initalise flying objects'''
+        """initalise flying objects"""
         self.period = self.calcPeriod(massSelf, massOther, earthMoonDistance)
 
     def calcPeriod(self, massA, massB, earthMoonDistance):
-        '''calculate the period of orbit of object'''
+        """calculate the period of orbit of object"""
         return 2 * np.pi * np.sqrt(np.power(earthMoonDistance, 3) / (GravitationalConst * (massA + massB)))
 
     def getRockPosition(self, massSelf, massOther, earthMoonDistance):
-        '''Get position of the Rock (planet or moon depending on masses that are passed in)'''
+        """Get position of the Rock (planet or moon depending on masses that are passed in)"""
         return (massOther * earthMoonDistance) / (massSelf + abs(massOther))
 
 
 class BigRock(SpaceStuff):
-    '''Class for planets and moons'''
+    """Class for planets and moons"""
     def __init__(self, massSelf, massOther, earthMoonDistance):
-        '''Initialise planets and moons.'''
+        """Initialise planets and moons."""
         SpaceStuff.__init__(self, massSelf, massOther, earthMoonDistance)
         self.earthMoonDistance = earthMoonDistance
         self.posRock = SpaceStuff.getRockPosition(self, massSelf, massOther, self.earthMoonDistance)
@@ -46,28 +47,27 @@ class BigRock(SpaceStuff):
         self.theta = 0.
 
     def move(self, interval, massSelf, massOther):
-        '''Move planets and moons through their orbits.'''
+        """Move planets and moons through their orbits."""
         self.Y = np.sin(self.theta) * self.posRock
         self.X = np.cos(self.theta) * self.posRock
         self.getCurrentTheta(interval, SpaceStuff.calcPeriod(self, massSelf, massOther, self.earthMoonDistance))
         return self.Y, self.X
 
     def reset(self):
-        '''Reset positions of all objects to initial positions.'''
+        """Reset positions of all objects to initial positions."""
         self.Y = 0.
         self.X = copy.copy(self.posRock)
         self.theta = 0.
 
     def getCurrentTheta(self, timestep, period):
-        '''Get current angle through orbit.'''
+        """Get current angle through orbit."""
         self.theta = self.theta + (timestep / period) * np.pi * 2
 
 
-
 class Rocket():
-    '''Class representing ring particle orbiting planet'''
+    """Class representing ring particle orbiting planet"""
     def __init__(self, pos, earthInit_X, earthInit_y, moonInit_x, moonInit_y, massPlanet, massMoon, lagrange, earthMoonDistance):
-        '''Initalise all parameters.'''
+        """Initalise all parameters."""
         self.earthMoonDistance = earthMoonDistance
         self.massPlanet = massPlanet
         self.massMoon = massMoon
@@ -86,31 +86,31 @@ class Rocket():
         self.getDistance(earthInit_X, earthInit_y, moonInit_x, moonInit_y)
 
     def getDistance(self, earthX, earthY, moonX, moonY):
-        '''Get the distance between the particle and the planet and the particle and the moon.'''
+        """Get the distance between the particle and the planet and the particle and the moon."""
         self.distanceEarth = np.sqrt((np.power((self.X - earthX), 2)) + (np.power((self.Y - earthY), 2)))
         self.distanceMoon = np.sqrt(((self.X - moonX) ** 2) + ((self.Y - moonY) ** 2))
         # print self.distanceMoon
 
     def trackEnergy(self, v, r, massP):
-        '''Find total energy of the particle (Kinetic + Gravitational Potential)'''
+        """Find total energy of the particle (Kinetic + Gravitational Potential)"""
         GPE = - GravitationalConst * massP / r
         KE = 0.5 * v ** 2
 
         return GPE + KE
 
     def calcVel(self, pos):
-        '''Calculate the velocity at the Lagrange point'''
+        """Calculate the velocity at the Lagrange point"""
         print DeprecationWarning("Calculating velocity in this way is not correct for a general system, use for Lagrange points only")
         timeOrbit = 2 * np.pi * math.sqrt((np.power(self.earthMoonDistance, 3)) / (GravitationalConst * (self.massPlanet + self.massMoon)))
         print "time orbit: ", timeOrbit
         return  (2 * np.pi / timeOrbit) * pos
 
     def calcVelRocket(self, pos):
-        '''Calculating velocity the proper way (Using Newton's laws) for a general system'''
+        """Calculating velocity the proper way (Using Newton's laws) for a general system"""
         return np.sqrt((GravitationalConst * self.massPlanet) / pos )
 
     def rungeKutta(self, earthX, earthY, moonX, moonY, a, printResults):
-        '''Numerical approximation of motion - 4th order approximation'''
+        """Numerical approximation of motion - 4th order approximation"""
         self.getAcceleration(earthX, earthY, moonX, moonY)
         # First step
         z1 = self.X + (a / 2) * self.V_x
@@ -142,7 +142,7 @@ class Rocket():
         return self.X, self.Y, self.V_x, self.V_y
 
     def taylorExpansion(self,earthX, earthY, moonX, moonY, a):
-        '''3rd order taylor expansion, not as accurate as runge-kutta'''
+        """3rd order taylor expansion, not as accurate as runge-kutta"""
 
         self.getAcceleration(earthX, earthY, moonX, moonY)
         # Get positions and speeds from taylor expansion to third order.
@@ -155,7 +155,7 @@ class Rocket():
         return self.X, self.Y
 
     def getZandW(self, earthX, earthY, moonX, moonY, z, w):
-        '''Gets vectors required for runge-kutta'''
+        """Gets vectors required for runge-kutta"""
         self.getDistance(earthX, earthY, moonX, moonY)
         zDoubleDash = -GravitationalConst * self.massPlanet * ((z - earthX) / (np.power(self.distanceEarth, 3))) - \
                 GravitationalConst * self.massMoon * ((z - moonX) / (self.distanceMoon ** 3))
@@ -165,7 +165,7 @@ class Rocket():
         return (zDoubleDash, wDoubleDash)
 
     def getAcceleration(self, planetX, planetY, moonX, moonY):
-        '''Get acceleartion of rockets as a result of both planet and moon'''
+        """Get acceleartion of rockets as a result of both planet and moon"""
         self.getDistance(planetX, planetY, moonX, moonY)
         self.acc_x = -GravitationalConst * self.massPlanet * ((self.X - planetX) / (np.power(self.distanceEarth, 3))) - \
                 GravitationalConst * self.massMoon * ((self.X - moonX) / (self.distanceMoon ** 3))

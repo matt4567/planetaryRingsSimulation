@@ -14,14 +14,15 @@ from email.mime.multipart import MIMEMultipart
 # this class contains a lot of helper methods. Many of these are not used but have been
 # left here for future use.
 
+
 def estimateCompletionTime(gap, range, time):
-    '''Estimate completion time of simulation by looking at completion time of one iteration.'''
+    """Estimate completion time of simulation by looking at completion time of one iteration."""
     result = str((time * (range / gap)) / 60)
     return "Simulation will take " + result + " mins"
 
 
 def sendEmail(number, mins):
-    '''send yourself an email when its done running --- this requires setup'''
+    """send yourself an email when its done running --- this requires setup"""
     time.sleep(5)
     # your gmail account
     fromaddr = "dummymail@gmail.com"
@@ -54,12 +55,14 @@ def sendEmail(number, mins):
     server.sendmail(fromaddr, toaddr, text)
     print "Email sent!"
 
+
 def findBucket(x, resolution):
-    '''Find the correct bucket for a particle when grouping the data to plot densities.'''
+    """Find the correct bucket for a particle when grouping the data to plot densities."""
     return int(math.floor(x / resolution)) * resolution
 
+
 def animateMotion(rocketPosX, rocketPosY, earthPosX, earthPosY, moonPosX, moonPosY):
-    '''Creates and saves an animation of the orbits of the earth, moon and rocket. Used for presentation purposes.'''
+    """Creates and saves an animation of the orbits of the earth, moon and rocket. Used for presentation purposes."""
     # Create arrays for rocket, earth and moon positions
     rocketArrayX = np.array(rocketPosX[0::1500])
     rocketArrayY = np.array(rocketPosY[0::1500])
@@ -82,8 +85,8 @@ def animateMotion(rocketPosX, rocketPosY, earthPosX, earthPosY, moonPosX, moonPo
     moon = plt.Circle((0, 0), 40000, fc='g', label = "Moon")
     ax.legend(handles=[rocket, earth, moon])
 
-    # setup for for animation. Add objects to animation.
     def init():
+        """setup for for animation. Add objects to animation."""
         rocket.center = (5, 5)
         ax.add_patch(rocket)
 
@@ -94,8 +97,8 @@ def animateMotion(rocketPosX, rocketPosY, earthPosX, earthPosY, moonPosX, moonPo
         ax.add_patch(moon)
         return rocket, earth, moon
 
-    # Run animation, move positions of rocket, earth and moon according to previously simulated positions.
     def animate(i):
+        """Run animation, move positions of rocket, earth and moon according to previously simulated positions."""
         x = rocketArrayX[i]
         y = rocketArrayY[i]
         rocket.center = (x, y)
@@ -118,8 +121,9 @@ def animateMotion(rocketPosX, rocketPosY, earthPosX, earthPosY, moonPosX, moonPo
 
     anim.save('im.mp4')
 
+
 def plotStability(X, Y, Y2):
-    '''Create a plot of the stability of an orbit - plot start and end positions of orbit.'''
+    """Create a plot of the stability of an orbit - plot start and end positions of orbit."""
     fig = plt.figure()
     ax = fig.add_subplot(111)
     X2 = copy.copy(X)
@@ -133,8 +137,9 @@ def plotStability(X, Y, Y2):
     plt.title("Orbital stability")
     fig.savefig("plot.png")
 
+
 def plotWidths(X, Y):
-    '''Plot the widths of the divisions.'''
+    """Plot the widths of the divisions."""
     fig = plt.figure()
     ax = fig.add_subplot(111)
     plt.plot(X, Y)
@@ -147,7 +152,7 @@ def plotWidths(X, Y):
 
 
 def plotOrbits(rocketPos):
-    '''Plot the orbits of the particle.'''
+    """Plot the orbits of the particle."""
     fig = plt.figure()
     print "plotting orbits"
     for i, val in enumerate(rocketPos):

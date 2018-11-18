@@ -18,8 +18,9 @@ MassTriton = 2.14e1022
 MassUranus = 8.681e25
 MassTitania = 3.42e21
 
+
 def getMassesAndDistance(system):
-    '''Return masses of system as well as distance between planet and moon in km'''
+    """Return masses of system as well as distance between planet and moon in km"""
     system = system.lower()
 
     planetLookUp = {
